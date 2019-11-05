@@ -1,0 +1,14 @@
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+
+# VSCode project files
+.vscode
+
+# Project specific
+/tdt2go
+/tdt2go.exe
+**/debug.test
+**/debug
