@@ -14,35 +14,41 @@ import (
 )
 
 type Options struct {
-	Package         string
-	Output          io.Writer
-	IncludePatterns []string
-	ExcludePatterns []string
+	pkg                  string
+	output               io.Writer
+	generateBuiltinTypes bool
+	includePatterns      []string
+	excludePatterns      []string
 }
 
 type Option func(*Options)
 
+func GenerateBuiltinTypes(p bool) Option {
+	return func(o *Options) {
+		o.generateBuiltinTypes = p
+	}
+}
 func ExcludePatterns(p []string) Option {
 	return func(o *Options) {
-		o.ExcludePatterns = p
+		o.excludePatterns = p
 	}
 }
 
 func IncludePatterns(p []string) Option {
 	return func(o *Options) {
-		o.IncludePatterns = p
+		o.includePatterns = p
 	}
 }
 
 func Package(p string) Option {
 	return func(o *Options) {
-		o.Package = p
+		o.pkg = p
 	}
 }
 
 func Output(out io.Writer) Option {
 	return func(o *Options) {
-		o.Output = out
+		o.output = out
 	}
 }
 
@@ -52,7 +58,7 @@ func OutputToFile(outputFile string, perm os.FileMode) (Option, error) {
 		return nil, err
 	}
 	return func(o *Options) {
-		o.Output = f
+		o.output = f
 	}, nil
 }
 
@@ -62,8 +68,8 @@ func defaultOptions(toscaFile string) (*Options, error) {
 		return nil, err
 	}
 	o := &Options{
-		Package: p,
-		Output:  os.Stdout,
+		pkg:    p,
+		output: os.Stdout,
 	}
 	return o, nil
 }
@@ -76,14 +82,16 @@ func GenerateFile(toscaFile string, opts ...Option) error {
 	for _, o := range opts {
 		o(options)
 	}
-	p := &parser.Parser{IncludePatterns: options.IncludePatterns, ExcludePatterns: options.ExcludePatterns}
+	p := &parser.Parser{IncludePatterns: options.includePatterns, ExcludePatterns: options.excludePatterns}
 	dataTypes, err := p.ParseTypes(toscaFile)
 	if err != nil {
 		return err
 	}
-
+	if options.generateBuiltinTypes {
+		dataTypes = append(dataTypes, getBuiltinTypes()...)
+	}
 	f := generator.File{
-		Package:   options.Package,
+		Package:   options.pkg,
 		Imports:   getImports(dataTypes),
 		DataTypes: dataTypes,
 	}
@@ -101,7 +109,7 @@ func GenerateFile(toscaFile string, opts ...Option) error {
 }
 
 func outputFile(content []byte, options *Options) error {
-	_, err := options.Output.Write(content)
+	_, err := options.output.Write(content)
 	if err != nil {
 		return fmt.Errorf("failed to write generated content: %w", err)
 	}
@@ -153,4 +161,44 @@ func getCurrentPackage() (string, error) {
 		return "", fmt.Errorf("failed to load current package: %d packages found", len(pkgs))
 	}
 	return pkgs[0].Name, nil
+}
+
+func getBuiltinTypes() []model.DataType {
+	return []model.DataType{
+		model.DataType{
+			Name:        "Range",
+			FQDTN:       "tosca:range",
+			DerivedFrom: "[]uint64",
+		},
+		model.DataType{
+			Name:        "ScalarUnit",
+			FQDTN:       "tosca:scalar-unit",
+			DerivedFrom: "string",
+		},
+		model.DataType{
+			Name:        "ScalarUnitBitRate",
+			FQDTN:       "tosca:scalar-unit.bitrate",
+			DerivedFrom: "ScalarUnit",
+		},
+		model.DataType{
+			Name:        "ScalarUnitFrequency",
+			FQDTN:       "tosca:scalar-unit.frequency",
+			DerivedFrom: "ScalarUnit",
+		},
+		model.DataType{
+			Name:        "ScalarUnitSize",
+			FQDTN:       "tosca:scalar-unit.size",
+			DerivedFrom: "ScalarUnit",
+		},
+		model.DataType{
+			Name:        "ScalarUnitTim",
+			FQDTN:       "tosca:scalar-unit.time",
+			DerivedFrom: "ScalarUnit",
+		},
+		model.DataType{
+			Name:        "Version",
+			FQDTN:       "tosca:version",
+			DerivedFrom: "string",
+		},
+	}
 }

@@ -36,6 +36,7 @@ func TestGenerateFile(t *testing.T) {
 			ExcludePatterns([]string{`tosca.*`}),
 			IncludePatterns([]string{`tosca\.datatypes.Root`}),
 		}}, false},
+		{"NormativeLightPlusBuiltin", args{toscaFile: "testdata/normative-light.yaml", opts: []Option{GenerateBuiltinTypes(true)}}, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -76,8 +77,8 @@ func TestOutputToFile(t *testing.T) {
 			if got != nil {
 				o := &Options{}
 				got(o)
-				assert.Assert(t, o.Output != nil, "output should not be nil")
-				f, ok := o.Output.(*os.File)
+				assert.Assert(t, o.output != nil, "output should not be nil")
+				f, ok := o.output.(*os.File)
 				assert.Assert(t, ok, "output is not a file")
 				assert.Equal(t, tt.args.outputFile, f.Name(), "wrong file name")
 				os.Remove(f.Name())

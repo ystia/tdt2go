@@ -88,6 +88,18 @@ func TestGenerator_GenerateFile(t *testing.T) {
 				},
 			},
 		}, false},
+		{"DerivedFromBuildtin", &Generator{}, args{
+			File{
+				Package: "simple",
+				DataTypes: []model.DataType{
+					model.DataType{
+						Name:        "MyDerivedDT",
+						FQDTN:       "org.ystia.datatypes.MyDerivedDT",
+						DerivedFrom: "string",
+					},
+				},
+			},
+		}, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

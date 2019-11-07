@@ -14,12 +14,12 @@ import (
 {{- range .DataTypes}}
 
 // {{.Name}} is the generated representation of {{.FQDTN}} data type
-type {{.Name}} struct {
+type {{.Name}} {{ if and (ne .DerivedFrom "") (eq (len .Fields) 0) }}{{.DerivedFrom}}{{ else }}struct {
 {{- if ne .DerivedFrom ""}}
 	{{.DerivedFrom}}
 {{- end}}
 	{{- range .Fields}}
 	{{.Name}} {{.Type}} {{- if ne .OriginalName ""}} {{ $tick }}mapstructure:"{{.OriginalName}}" json:"{{.OriginalName}},omitempty"{{ $tick }}{{end}}{{end}}
 }
-{{end -}}
+{{end}}{{end -}}
 `

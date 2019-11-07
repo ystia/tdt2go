@@ -37,6 +37,7 @@ var generatedFile string
 var packageName string
 var includePatterns []string
 var excludePatterns []string
+var generateBuiltinTypes bool
 
 func init() {
 
@@ -60,6 +61,7 @@ func init() {
 	rootCmd.Flags().StringVarP(&packageName, "package", "p", "", "package name as it should appear in source file, defaults to the package name of the current directory.")
 	rootCmd.Flags().StringSliceVarP(&includePatterns, "include", "i", nil, "regexp patterns of data types fully qualified names to include. Only matching datatypes will be transformed. Include patterns have the precedence over exclude patterns.")
 	rootCmd.Flags().StringSliceVarP(&excludePatterns, "exclude", "e", nil, "regexp patterns of data types fully qualified names to exclude. Only non-matching datatypes will be transformed. Include patterns have the precedence over exclude patterns.")
+	rootCmd.Flags().BoolVarP(&generateBuiltinTypes, "generate-builtin", "b", false, "Generate tosca builtin types as 'range' or 'scalar-unit' for instance along with datatypes in this file. (default: false)")
 }
 
 func generateOptions() ([]tdt2go.Option, error) {
@@ -79,6 +81,9 @@ func generateOptions() ([]tdt2go.Option, error) {
 	}
 	if includePatterns != nil {
 		opts = append(opts, tdt2go.IncludePatterns(includePatterns))
+	}
+	if generateBuiltinTypes {
+		opts = append(opts, tdt2go.GenerateBuiltinTypes(true))
 	}
 	return opts, nil
 }

@@ -74,7 +74,7 @@ func (p *Parser) ParseTypes(filePath string) ([]model.DataType, error) {
 		ts = append(ts, model.DataType{
 			Name:        p.convertDTName(dtName),
 			FQDTN:       dtName,
-			DerivedFrom: p.convertDTName(dt.DerivedFrom),
+			DerivedFrom: p.convertTOSCAType(dt.DerivedFrom),
 			Fields:      p.convertDTFields(dt.Properties),
 		})
 	}
@@ -132,6 +132,20 @@ func (p *Parser) convertTOSCAType(t string) string {
 		return "float64"
 	case "timestamp":
 		return "time.Time"
+	case "version":
+		return "Version"
+	case "range":
+		return "Range"
+	case "scalar-unit":
+		return "ScalarUnit"
+	case "scalar-unit.size":
+		return "ScalarUnitSize"
+	case "scalar-unit.time":
+		return "ScalarUnitTime"
+	case "scalar-unit.frequency":
+		return "ScalarUnitFrequency"
+	case "scalar-unit.bitrate":
+		return "ScalarUnitBitRate"
 	}
 	return p.convertDTName(t)
 }
