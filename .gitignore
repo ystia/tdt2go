@@ -12,3 +12,4 @@ gen
 /tdt2go.exe
 **/debug.test
 **/debug
+/testdata/generated/*.test

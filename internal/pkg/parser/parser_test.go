@@ -1,25 +1,12 @@
 package parser
 
 import (
-	"sort"
 	"testing"
 
 	"github.com/ystia/tdt2go/internal/pkg/model"
 
 	"gotest.tools/v3/assert"
 )
-
-type dtSlice []model.DataType
-
-func (p dtSlice) Len() int           { return len(p) }
-func (p dtSlice) Less(i, j int) bool { return p[i].FQDTN < p[j].FQDTN }
-func (p dtSlice) Swap(i, j int)      { p[i], p[j] = p[j], p[i] }
-
-type dtFieldsSlice []model.Field
-
-func (p dtFieldsSlice) Len() int           { return len(p) }
-func (p dtFieldsSlice) Less(i, j int) bool { return p[i].OriginalName < p[j].OriginalName }
-func (p dtFieldsSlice) Swap(i, j int)      { p[i], p[j] = p[j], p[i] }
 
 func TestParser_ParseTypes(t *testing.T) {
 	type args struct {
@@ -34,6 +21,8 @@ func TestParser_ParseTypes(t *testing.T) {
 	}{
 		{"NoTOSCAFile", &Parser{}, args{"testdata/donotexists.yaml"}, nil, true},
 		{"InvalidTOSCAFile", &Parser{}, args{"testdata/invalid.yaml"}, nil, true},
+		{"InvalidIncludeFilter", &Parser{IncludePatterns: []string{`x{2,1}}`}}, args{"testdata/normative-light.yaml"}, nil, true},
+		{"InvalidExcludeFilter", &Parser{ExcludePatterns: []string{`x{2,1}}`}}, args{"testdata/normative-light.yaml"}, nil, true},
 		{"TestParseNormativeLight", &Parser{}, args{"testdata/normative-light.yaml"}, []model.DataType{
 			model.DataType{
 				Name:        "Credential",
@@ -41,13 +30,13 @@ func TestParser_ParseTypes(t *testing.T) {
 				DerivedFrom: "Root",
 				Fields: []model.Field{
 					model.Field{
-						Name:         "Protocol",
-						OriginalName: "protocol",
-						Type:         "string",
+						Name:         "Keys",
+						OriginalName: "keys",
+						Type:         "map[string]string",
 					},
 					model.Field{
-						Name:         "TokenType",
-						OriginalName: "token_type",
+						Name:         "Protocol",
+						OriginalName: "protocol",
 						Type:         "string",
 					},
 					model.Field{
@@ -56,9 +45,9 @@ func TestParser_ParseTypes(t *testing.T) {
 						Type:         "string",
 					},
 					model.Field{
-						Name:         "Keys",
-						OriginalName: "keys",
-						Type:         "map[string]string",
+						Name:         "TokenType",
+						OriginalName: "token_type",
+						Type:         "string",
 					},
 					model.Field{
 						Name:         "User",
@@ -78,13 +67,13 @@ func TestParser_ParseTypes(t *testing.T) {
 				DerivedFrom: "Root",
 				Fields: []model.Field{
 					model.Field{
-						Name:         "StartTime",
-						OriginalName: "start_time",
+						Name:         "EndTime",
+						OriginalName: "end_time",
 						Type:         "time.Time",
 					},
 					model.Field{
-						Name:         "EndTime",
-						OriginalName: "end_time",
+						Name:         "StartTime",
+						OriginalName: "start_time",
 						Type:         "time.Time",
 					},
 				},
@@ -97,16 +86,6 @@ func TestParser_ParseTypes(t *testing.T) {
 				DerivedFrom: "Root",
 				Fields: []model.Field{
 					model.Field{
-						Name:         "TestAList",
-						OriginalName: "test_a_list",
-						Type:         "[]int",
-					},
-					model.Field{
-						Name:         "ValidBool",
-						OriginalName: "valid_bool",
-						Type:         "bool",
-					},
-					model.Field{
 						Name:         "ANumber",
 						OriginalName: "a_number",
 						Type:         "float64",
@@ -116,40 +95,82 @@ func TestParser_ParseTypes(t *testing.T) {
 						OriginalName: "another_type",
 						Type:         "Credential",
 					},
+					model.Field{
+						Name:         "TestAList",
+						OriginalName: "test_a_list",
+						Type:         "[]int",
+					},
+					model.Field{
+						Name:         "ValidBool",
+						OriginalName: "valid_bool",
+						Type:         "bool",
+					},
 				},
+			},
+		}, false},
+		{"TestParseIncludeFilters", &Parser{
+			IncludePatterns: []string{`tosca\.datatypes\.Cred.*`, `tosca.datatypes.Root`},
+		}, args{"testdata/normative-light.yaml"}, []model.DataType{
+			model.DataType{
+				Name:        "Credential",
+				FQDTN:       "tosca.datatypes.Credential",
+				DerivedFrom: "Root",
+				Fields: []model.Field{
+					model.Field{
+						Name:         "Keys",
+						OriginalName: "keys",
+						Type:         "map[string]string",
+					},
+					model.Field{
+						Name:         "Protocol",
+						OriginalName: "protocol",
+						Type:         "string",
+					},
+					model.Field{
+						Name:         "Token",
+						OriginalName: "token",
+						Type:         "string",
+					},
+					model.Field{
+						Name:         "TokenType",
+						OriginalName: "token_type",
+						Type:         "string",
+					},
+					model.Field{
+						Name:         "User",
+						OriginalName: "user",
+						Type:         "string",
+					},
+				},
+			},
+			model.DataType{
+				Name:   "Root",
+				FQDTN:  "tosca.datatypes.Root",
+				Fields: []model.Field{},
+			},
+		}, false},
+		{"TestParseExcludeFilters", &Parser{
+			ExcludePatterns: []string{`tosca\.datatypes\.Cred.*`, `tosca\.datatypes.TimeInterval`},
+		}, args{"testdata/normative-light.yaml"}, []model.DataType{
+			model.DataType{
+				Name:   "Root",
+				FQDTN:  "tosca.datatypes.Root",
+				Fields: []model.Field{},
 			},
 		}, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			p := &Parser{}
-			got, err := p.ParseTypes(tt.args.filePath)
+
+			got, err := tt.p.ParseTypes(tt.args.filePath)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Parser.ParseTypes() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 
 			if err == nil {
-				sortSlices(got, tt.want)
 				assert.DeepEqual(t, got, tt.want)
 			}
 		})
-	}
-}
-
-func sortSlices(got, want []model.DataType) {
-	var cGot, cWant dtSlice
-	cGot = got
-	cWant = want
-	sort.Sort(cGot)
-	sort.Sort(cWant)
-
-	for _, dt := range got {
-		var s dtFieldsSlice = dt.Fields
-		sort.Sort(s)
-	}
-	for _, dt := range want {
-		var s dtFieldsSlice = dt.Fields
-		sort.Sort(s)
 	}
 }

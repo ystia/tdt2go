@@ -14,11 +14,25 @@ import (
 )
 
 type Options struct {
-	Package string
-	Output  io.Writer
+	Package         string
+	Output          io.Writer
+	IncludePatterns []string
+	ExcludePatterns []string
 }
 
 type Option func(*Options)
+
+func ExcludePatterns(p []string) Option {
+	return func(o *Options) {
+		o.ExcludePatterns = p
+	}
+}
+
+func IncludePatterns(p []string) Option {
+	return func(o *Options) {
+		o.IncludePatterns = p
+	}
+}
 
 func Package(p string) Option {
 	return func(o *Options) {
@@ -62,7 +76,7 @@ func GenerateFile(toscaFile string, opts ...Option) error {
 	for _, o := range opts {
 		o(options)
 	}
-	p := &parser.Parser{}
+	p := &parser.Parser{IncludePatterns: options.IncludePatterns, ExcludePatterns: options.ExcludePatterns}
 	dataTypes, err := p.ParseTypes(toscaFile)
 	if err != nil {
 		return err

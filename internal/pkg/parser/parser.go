@@ -3,6 +3,8 @@ package parser
 import (
 	"fmt"
 	"io/ioutil"
+	"regexp"
+	"sort"
 	"strings"
 
 	"github.com/ystia/yorc/v4/tosca"
@@ -11,7 +13,48 @@ import (
 	"github.com/ystia/tdt2go/internal/pkg/model"
 )
 
+type dtSlice []model.DataType
+
+func (p dtSlice) Len() int           { return len(p) }
+func (p dtSlice) Less(i, j int) bool { return p[i].FQDTN < p[j].FQDTN }
+func (p dtSlice) Swap(i, j int)      { p[i], p[j] = p[j], p[i] }
+
+type dtFieldsSlice []model.Field
+
+func (p dtFieldsSlice) Len() int           { return len(p) }
+func (p dtFieldsSlice) Less(i, j int) bool { return p[i].OriginalName < p[j].OriginalName }
+func (p dtFieldsSlice) Swap(i, j int)      { p[i], p[j] = p[j], p[i] }
+
 type Parser struct {
+	IncludePatterns []string
+	ExcludePatterns []string
+}
+
+func (p *Parser) nameValidatesPatterns(dtName string) (bool, error) {
+	if len(p.IncludePatterns) > 0 {
+		for _, i := range p.IncludePatterns {
+			matched, err := regexp.MatchString(i, dtName)
+			if err != nil {
+				return false, fmt.Errorf("invalid include pattern %q: %w", i, err)
+			}
+			if matched {
+				return true, nil
+			}
+		}
+		return false, nil
+	}
+	if len(p.ExcludePatterns) > 0 {
+		for _, e := range p.ExcludePatterns {
+			matched, err := regexp.MatchString(e, dtName)
+			if err != nil {
+				return false, fmt.Errorf("invalid exclude pattern %q: %w", e, err)
+			}
+			if matched {
+				return false, nil
+			}
+		}
+	}
+	return true, nil
 }
 
 func (p *Parser) ParseTypes(filePath string) ([]model.DataType, error) {
@@ -19,9 +62,15 @@ func (p *Parser) ParseTypes(filePath string) ([]model.DataType, error) {
 	if err != nil {
 		return nil, err
 	}
-	ts := make([]model.DataType, 0)
+	ts := make(dtSlice, 0)
 	for dtName, dt := range topo.DataTypes {
-
+		valid, err := p.nameValidatesPatterns(dtName)
+		if err != nil {
+			return nil, err
+		}
+		if !valid {
+			continue
+		}
 		ts = append(ts, model.DataType{
 			Name:        p.convertDTName(dtName),
 			FQDTN:       dtName,
@@ -29,7 +78,7 @@ func (p *Parser) ParseTypes(filePath string) ([]model.DataType, error) {
 			Fields:      p.convertDTFields(dt.Properties),
 		})
 	}
-
+	sort.Sort(ts)
 	return ts, nil
 }
 
@@ -47,7 +96,7 @@ func (p *Parser) parseTopology(filePath string) (*tosca.Topology, error) {
 }
 
 func (p *Parser) convertDTFields(props map[string]tosca.PropertyDefinition) []model.Field {
-	fields := make([]model.Field, 0)
+	fields := make(dtFieldsSlice, 0)
 	for pName, prop := range props {
 		f := model.Field{
 			Name:         strings.ReplaceAll(strings.Title(strings.ReplaceAll(pName, "_", " ")), " ", ""),
@@ -56,6 +105,7 @@ func (p *Parser) convertDTFields(props map[string]tosca.PropertyDefinition) []mo
 		}
 		fields = append(fields, f)
 	}
+	sort.Sort(fields)
 	return fields
 }
 

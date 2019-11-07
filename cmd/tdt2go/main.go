@@ -19,16 +19,12 @@ import (
 	"fmt"
 	"os"
 
-	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 	"github.com/ystia/tdt2go"
 )
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd *cobra.Command
-
-var cfgFile string
 
 func main() {
 	if err := rootCmd.Execute(); err != nil {
@@ -37,9 +33,13 @@ func main() {
 	}
 }
 
+var generatedFile string
+var packageName string
+var includePatterns []string
+var excludePatterns []string
+
 func init() {
-	var generatedFile string
-	var packageName string
+
 	rootCmd = &cobra.Command{
 		Args:  cobra.ExactArgs(1),
 		Use:   "tdt2go <tosca_file>",
@@ -48,51 +48,37 @@ func init() {
 		// Uncomment the following line if your bare application
 		// has an action associated with it:
 		RunE: func(cmd *cobra.Command, args []string) error {
-			opts := make([]tdt2go.Option, 0)
-			if generatedFile != "" {
-				o, err := tdt2go.OutputToFile(generatedFile, 0664)
-				if err != nil {
-					return err
-				}
-				opts = append(opts, o)
-			}
-			if packageName != "" {
-				opts = append(opts, tdt2go.Package(packageName))
+			opts, err := generateOptions()
+			if err != nil {
+				return err
 			}
 			return tdt2go.GenerateFile(args[0], opts...)
 		},
 	}
 
-	cobra.OnInitialize(initConfig)
-
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.tdt2go.yaml)")
-
 	rootCmd.Flags().StringVarP(&generatedFile, "file", "f", "", "file to be generated, if not defined resulting generated file will be printed on default output.")
 	rootCmd.Flags().StringVarP(&packageName, "package", "p", "", "package name as it should appear in source file, defaults to the package name of the current directory.")
+	rootCmd.Flags().StringSliceVarP(&includePatterns, "include", "i", nil, "regexp patterns of data types fully qualified names to include. Only matching datatypes will be transformed. Include patterns have the precedence over exclude patterns.")
+	rootCmd.Flags().StringSliceVarP(&excludePatterns, "exclude", "e", nil, "regexp patterns of data types fully qualified names to exclude. Only non-matching datatypes will be transformed. Include patterns have the precedence over exclude patterns.")
 }
 
-// initConfig reads in config file and ENV variables if set.
-func initConfig() {
-	if cfgFile != "" {
-		// Use config file from the flag.
-		viper.SetConfigFile(cfgFile)
-	} else {
-		// Find home directory.
-		home, err := homedir.Dir()
+func generateOptions() ([]tdt2go.Option, error) {
+	opts := make([]tdt2go.Option, 0)
+	if generatedFile != "" {
+		o, err := tdt2go.OutputToFile(generatedFile, 0664)
 		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+			return nil, err
 		}
-
-		// Search config in home directory with name ".tdt2go" (without extension).
-		viper.AddConfigPath(home)
-		viper.SetConfigName(".tdt2go")
+		opts = append(opts, o)
 	}
-
-	viper.AutomaticEnv() // read in environment variables that match
-
-	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
+	if packageName != "" {
+		opts = append(opts, tdt2go.Package(packageName))
 	}
+	if excludePatterns != nil {
+		opts = append(opts, tdt2go.ExcludePatterns(excludePatterns))
+	}
+	if includePatterns != nil {
+		opts = append(opts, tdt2go.IncludePatterns(includePatterns))
+	}
+	return opts, nil
 }
