@@ -13,6 +13,10 @@ import (
 	"golang.org/x/tools/go/packages"
 )
 
+// Options are options you are allowed to customize when generating TOSCA datatypes structures
+//
+// This package uses the functional options pattern https://github.com/tmrts/go-patterns/blob/master/idiom/functional-options.md
+// You can't use Options directly but using Option functions.
 type Options struct {
 	pkg                  string
 	output               io.Writer
@@ -21,45 +25,62 @@ type Options struct {
 	excludePatterns      []string
 }
 
+// Option is a function that is allowed to tweak Options
 type Option func(*Options)
 
+// GenerateBuiltinTypes option control if TOSCA builtin types should be generated along with
+// other datatypes. This option is false by default.
 func GenerateBuiltinTypes(p bool) Option {
 	return func(o *Options) {
 		o.generateBuiltinTypes = p
 	}
 }
+
+// ExcludePatterns is a set of regexp patterns of data types fully qualified names to exclude.
+// Only non-matching datatypes will be transformed.
+// Include patterns have the precedence over exclude patterns.
+// Default is empty.
 func ExcludePatterns(p []string) Option {
 	return func(o *Options) {
 		o.excludePatterns = p
 	}
 }
 
+// IncludePatterns is a set of regexp patterns of data types fully qualified names to include.
+// Only matching datatypes will be transformed.
+// Include patterns have the precedence over exclude patterns.
+// Default is empty
 func IncludePatterns(p []string) Option {
 	return func(o *Options) {
 		o.includePatterns = p
 	}
 }
 
+// Package is the package name as it should appear in source file.
+// Defaults to the package name of the current working directory.
 func Package(p string) Option {
 	return func(o *Options) {
 		o.pkg = p
 	}
 }
 
+// Output is a writer on which generated code will be dumped.
+// Defaults to stdout.
 func Output(out io.Writer) Option {
 	return func(o *Options) {
 		o.output = out
 	}
 }
 
+// OutputToFile is an helper function that allow to dump generated code into a file
+//
+// See Output
 func OutputToFile(outputFile string, perm os.FileMode) (Option, error) {
 	f, err := os.OpenFile(outputFile, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, perm)
 	if err != nil {
 		return nil, err
 	}
-	return func(o *Options) {
-		o.output = f
-	}, nil
+	return Output(f), nil
 }
 
 func defaultOptions(toscaFile string) (*Options, error) {
@@ -74,6 +95,9 @@ func defaultOptions(toscaFile string) (*Options, error) {
 	return o, nil
 }
 
+// GenerateFile generates go code for TOSCA datatypes contains in the given TOSCA definition file.
+//
+// Generation could be parametrized using Options.
 func GenerateFile(toscaFile string, opts ...Option) error {
 	options, err := defaultOptions(toscaFile)
 	if err != nil {
@@ -90,7 +114,7 @@ func GenerateFile(toscaFile string, opts ...Option) error {
 	if options.generateBuiltinTypes {
 		dataTypes = append(dataTypes, getBuiltinTypes()...)
 	}
-	f := generator.File{
+	f := model.File{
 		Package:   options.pkg,
 		Imports:   getImports(dataTypes),
 		DataTypes: dataTypes,

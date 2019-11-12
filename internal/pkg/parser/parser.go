@@ -25,8 +25,17 @@ func (p dtFieldsSlice) Len() int           { return len(p) }
 func (p dtFieldsSlice) Less(i, j int) bool { return p[i].OriginalName < p[j].OriginalName }
 func (p dtFieldsSlice) Swap(i, j int)      { p[i], p[j] = p[j], p[i] }
 
+// Parser is the TOSCA parser used to extract model.DataType from a TOSCA definition file
 type Parser struct {
+	// IncludePatterns is a list of regular expression patterns that fully qualified names of TOSCA datatypes should
+	// validates to be included.
+	// If no patterns are provided then all datatypes are considered.
+	// IncludePatterns have the precedence over ExcludePatterns.
 	IncludePatterns []string
+	// ExcludePatterns is a list of regular expression patterns that fully qualified names of TOSCA datatypes should
+	// validates to be excluded.
+	// If no patterns are provided then all datatypes are considered.
+	// IncludePatterns have the precedence over ExcludePatterns.
 	ExcludePatterns []string
 }
 
@@ -57,6 +66,9 @@ func (p *Parser) nameValidatesPatterns(dtName string) (bool, error) {
 	return true, nil
 }
 
+// ParseTypes parses a TOSCA definition file and extracts a list of model.DataType.
+//
+// Only the given TOSCA file is analyzed, TOSCA imports are not taken into account.
 func (p *Parser) ParseTypes(filePath string) ([]model.DataType, error) {
 	topo, err := p.parseTopology(filePath)
 	if err != nil {

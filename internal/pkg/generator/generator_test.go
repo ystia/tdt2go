@@ -10,7 +10,7 @@ import (
 
 func TestGenerator_GenerateFile(t *testing.T) {
 	type args struct {
-		f File
+		f model.File
 	}
 	tests := []struct {
 		name    string
@@ -18,9 +18,9 @@ func TestGenerator_GenerateFile(t *testing.T) {
 		args    args
 		wantErr bool
 	}{
-		{"EmptyFile", &Generator{}, args{File{Package: "something"}}, false},
+		{"EmptyFile", &Generator{}, args{model.File{Package: "something"}}, false},
 		{"SimpleDataType", &Generator{}, args{
-			File{
+			model.File{
 				Package: "simple",
 				DataTypes: []model.DataType{
 					model.DataType{
@@ -35,7 +35,7 @@ func TestGenerator_GenerateFile(t *testing.T) {
 			},
 		}, false},
 		{"FieldsTags", &Generator{}, args{
-			File{
+			model.File{
 				Package: "simple",
 				DataTypes: []model.DataType{
 					model.DataType{
@@ -50,7 +50,7 @@ func TestGenerator_GenerateFile(t *testing.T) {
 			},
 		}, false},
 		{"WithImports", &Generator{}, args{
-			File{
+			model.File{
 				Package: "simple",
 				Imports: []string{"fmt", "time"},
 				DataTypes: []model.DataType{
@@ -66,7 +66,7 @@ func TestGenerator_GenerateFile(t *testing.T) {
 			},
 		}, false},
 		{"DerivedDataType", &Generator{}, args{
-			File{
+			model.File{
 				Package: "simple",
 				DataTypes: []model.DataType{
 					model.DataType{
@@ -89,7 +89,7 @@ func TestGenerator_GenerateFile(t *testing.T) {
 			},
 		}, false},
 		{"DerivedFromBuildtin", &Generator{}, args{
-			File{
+			model.File{
 				Package: "simple",
 				DataTypes: []model.DataType{
 					model.DataType{

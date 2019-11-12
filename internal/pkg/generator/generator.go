@@ -9,16 +9,12 @@ import (
 	"github.com/ystia/tdt2go/internal/pkg/model"
 )
 
-type File struct {
-	Package   string
-	Imports   []string
-	DataTypes []model.DataType
-}
-
+// Generator is the generator used to convert model.DataTypes into Go source file
 type Generator struct {
 }
 
-func (*Generator) GenerateFile(f File) ([]byte, error) {
+// GenerateFile generates a formatted Go source file based on the given model.File representation
+func (*Generator) GenerateFile(f model.File) ([]byte, error) {
 	t := template.New("generator")
 	t = template.Must(t.Parse(fileTemplate))
 
