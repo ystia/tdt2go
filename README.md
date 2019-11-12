@@ -1,6 +1,8 @@
 # tdt2go
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/ystia/tdt2go)](https://goreportcard.com/report/github.com/ystia/tdt2go) [![GoDoc](https://godoc.org/github.com/ystia/tdt2go?status.svg)](https://godoc.org/github.com/ystia/tdt2go)
+[![Go Report Card](https://goreportcard.com/badge/github.com/ystia/tdt2go)](https://goreportcard.com/report/github.com/ystia/tdt2go) [![GoDoc](https://godoc.org/github.com/ystia/tdt2go?status.svg)](https://godoc.org/github.com/ystia/tdt2go) [![Build Status](https://travis-ci.com/ystia/tdt2go.svg?branch=master)](https://travis-ci.com/ystia/tdt2go)
+
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=ystia_tdt2go)](https://sonarcloud.io/dashboard?id=ystia_tdt2go)
 
 TOSCA DataTypes to Go (tdt2go) structures generator
 
