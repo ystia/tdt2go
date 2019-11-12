@@ -23,12 +23,12 @@ func TestGenerator_GenerateFile(t *testing.T) {
 			model.File{
 				Package: "simple",
 				DataTypes: []model.DataType{
-					model.DataType{
+					{
 						Name:  "MyDT",
 						FQDTN: "org.ystia.datatypes.MyDT",
 						Fields: []model.Field{
-							model.Field{Name: "F1", Type: "string"},
-							model.Field{Name: "F2", Type: "int"},
+							{Name: "F1", Type: "string"},
+							{Name: "F2", Type: "int"},
 						},
 					},
 				},
@@ -38,12 +38,12 @@ func TestGenerator_GenerateFile(t *testing.T) {
 			model.File{
 				Package: "simple",
 				DataTypes: []model.DataType{
-					model.DataType{
+					{
 						Name:  "MyDT",
 						FQDTN: "org.ystia.datatypes.MyDT",
 						Fields: []model.Field{
-							model.Field{Name: "F1", OriginalName: "f1", Type: "string"},
-							model.Field{Name: "F2", OriginalName: "my_f2", Type: "int"},
+							{Name: "F1", OriginalName: "f1", Type: "string"},
+							{Name: "F2", OriginalName: "my_f2", Type: "int"},
 						},
 					},
 				},
@@ -54,12 +54,12 @@ func TestGenerator_GenerateFile(t *testing.T) {
 				Package: "simple",
 				Imports: []string{"fmt", "time"},
 				DataTypes: []model.DataType{
-					model.DataType{
+					{
 						Name:  "MyDT",
 						FQDTN: "org.ystia.datatypes.MyDT",
 						Fields: []model.Field{
-							model.Field{Name: "F1", OriginalName: "f1", Type: "string"},
-							model.Field{Name: "F2", OriginalName: "my_f2", Type: "time.Date"},
+							{Name: "F1", OriginalName: "f1", Type: "string"},
+							{Name: "F2", OriginalName: "my_f2", Type: "time.Date"},
 						},
 					},
 				},
@@ -69,20 +69,20 @@ func TestGenerator_GenerateFile(t *testing.T) {
 			model.File{
 				Package: "simple",
 				DataTypes: []model.DataType{
-					model.DataType{
+					{
 						Name:  "MyDT",
 						FQDTN: "org.ystia.datatypes.MyDT",
 						Fields: []model.Field{
-							model.Field{Name: "F1", Type: "string"},
-							model.Field{Name: "F2", Type: "int"},
+							{Name: "F1", Type: "string"},
+							{Name: "F2", Type: "int"},
 						},
 					},
-					model.DataType{
+					{
 						Name:        "MyDerivedDT",
 						FQDTN:       "org.ystia.datatypes.MyDerivedDT",
 						DerivedFrom: "MyDT",
 						Fields: []model.Field{
-							model.Field{Name: "F3", Type: "[]string"},
+							{Name: "F3", Type: "[]string"},
 						},
 					},
 				},
@@ -92,7 +92,7 @@ func TestGenerator_GenerateFile(t *testing.T) {
 			model.File{
 				Package: "simple",
 				DataTypes: []model.DataType{
-					model.DataType{
+					{
 						Name:        "MyDerivedDT",
 						FQDTN:       "org.ystia.datatypes.MyDerivedDT",
 						DerivedFrom: "string",

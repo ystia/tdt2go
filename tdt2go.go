@@ -189,37 +189,37 @@ func getCurrentPackage() (string, error) {
 
 func getBuiltinTypes() []model.DataType {
 	return []model.DataType{
-		model.DataType{
+		{
 			Name:        "Range",
 			FQDTN:       "tosca:range",
 			DerivedFrom: "[]uint64",
 		},
-		model.DataType{
+		{
 			Name:        "ScalarUnit",
 			FQDTN:       "tosca:scalar-unit",
 			DerivedFrom: "string",
 		},
-		model.DataType{
+		{
 			Name:        "ScalarUnitBitRate",
 			FQDTN:       "tosca:scalar-unit.bitrate",
 			DerivedFrom: "ScalarUnit",
 		},
-		model.DataType{
+		{
 			Name:        "ScalarUnitFrequency",
 			FQDTN:       "tosca:scalar-unit.frequency",
 			DerivedFrom: "ScalarUnit",
 		},
-		model.DataType{
+		{
 			Name:        "ScalarUnitSize",
 			FQDTN:       "tosca:scalar-unit.size",
 			DerivedFrom: "ScalarUnit",
 		},
-		model.DataType{
+		{
 			Name:        "ScalarUnitTim",
 			FQDTN:       "tosca:scalar-unit.time",
 			DerivedFrom: "ScalarUnit",
 		},
-		model.DataType{
+		{
 			Name:        "Version",
 			FQDTN:       "tosca:version",
 			DerivedFrom: "string",

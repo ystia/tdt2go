@@ -24,54 +24,54 @@ func TestParser_ParseTypes(t *testing.T) {
 		{"InvalidIncludeFilter", &Parser{IncludePatterns: []string{`x{2,1}}`}}, args{"testdata/normative-light.yaml"}, nil, true},
 		{"InvalidExcludeFilter", &Parser{ExcludePatterns: []string{`x{2,1}}`}}, args{"testdata/normative-light.yaml"}, nil, true},
 		{"TestParseNormativeLight", &Parser{}, args{"testdata/normative-light.yaml"}, []model.DataType{
-			model.DataType{
+			{
 				Name:        "Credential",
 				FQDTN:       "tosca.datatypes.Credential",
 				DerivedFrom: "Root",
 				Fields: []model.Field{
-					model.Field{
+					{
 						Name:         "Keys",
 						OriginalName: "keys",
 						Type:         "map[string]string",
 					},
-					model.Field{
+					{
 						Name:         "Protocol",
 						OriginalName: "protocol",
 						Type:         "string",
 					},
-					model.Field{
+					{
 						Name:         "Token",
 						OriginalName: "token",
 						Type:         "string",
 					},
-					model.Field{
+					{
 						Name:         "TokenType",
 						OriginalName: "token_type",
 						Type:         "string",
 					},
-					model.Field{
+					{
 						Name:         "User",
 						OriginalName: "user",
 						Type:         "string",
 					},
 				},
 			},
-			model.DataType{
+			{
 				Name:   "Root",
 				FQDTN:  "tosca.datatypes.Root",
 				Fields: []model.Field{},
 			},
-			model.DataType{
+			{
 				Name:        "TimeInterval",
 				FQDTN:       "tosca.datatypes.TimeInterval",
 				DerivedFrom: "Root",
 				Fields: []model.Field{
-					model.Field{
+					{
 						Name:         "EndTime",
 						OriginalName: "end_time",
 						Type:         "time.Time",
 					},
-					model.Field{
+					{
 						Name:         "StartTime",
 						OriginalName: "start_time",
 						Type:         "time.Time",
@@ -80,27 +80,27 @@ func TestParser_ParseTypes(t *testing.T) {
 			},
 		}, false},
 		{"TestExtraToscaTypes", &Parser{}, args{"testdata/extratypes.yaml"}, []model.DataType{
-			model.DataType{
+			{
 				Name:        "SpecificTypes",
 				FQDTN:       "tosca.datatypes.SpecificTypes",
 				DerivedFrom: "Root",
 				Fields: []model.Field{
-					model.Field{
+					{
 						Name:         "ANumber",
 						OriginalName: "a_number",
 						Type:         "float64",
 					},
-					model.Field{
+					{
 						Name:         "AnotherType",
 						OriginalName: "another_type",
 						Type:         "Credential",
 					},
-					model.Field{
+					{
 						Name:         "TestAList",
 						OriginalName: "test_a_list",
 						Type:         "[]int",
 					},
-					model.Field{
+					{
 						Name:         "ValidBool",
 						OriginalName: "valid_bool",
 						Type:         "bool",
@@ -111,39 +111,39 @@ func TestParser_ParseTypes(t *testing.T) {
 		{"TestParseIncludeFilters", &Parser{
 			IncludePatterns: []string{`tosca\.datatypes\.Cred.*`, `tosca.datatypes.Root`},
 		}, args{"testdata/normative-light.yaml"}, []model.DataType{
-			model.DataType{
+			{
 				Name:        "Credential",
 				FQDTN:       "tosca.datatypes.Credential",
 				DerivedFrom: "Root",
 				Fields: []model.Field{
-					model.Field{
+					{
 						Name:         "Keys",
 						OriginalName: "keys",
 						Type:         "map[string]string",
 					},
-					model.Field{
+					{
 						Name:         "Protocol",
 						OriginalName: "protocol",
 						Type:         "string",
 					},
-					model.Field{
+					{
 						Name:         "Token",
 						OriginalName: "token",
 						Type:         "string",
 					},
-					model.Field{
+					{
 						Name:         "TokenType",
 						OriginalName: "token_type",
 						Type:         "string",
 					},
-					model.Field{
+					{
 						Name:         "User",
 						OriginalName: "user",
 						Type:         "string",
 					},
 				},
 			},
-			model.DataType{
+			{
 				Name:   "Root",
 				FQDTN:  "tosca.datatypes.Root",
 				Fields: []model.Field{},
@@ -152,7 +152,7 @@ func TestParser_ParseTypes(t *testing.T) {
 		{"TestParseExcludeFilters", &Parser{
 			ExcludePatterns: []string{`tosca\.datatypes\.Cred.*`, `tosca\.datatypes.TimeInterval`},
 		}, args{"testdata/normative-light.yaml"}, []model.DataType{
-			model.DataType{
+			{
 				Name:   "Root",
 				FQDTN:  "tosca.datatypes.Root",
 				Fields: []model.Field{},
