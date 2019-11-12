@@ -1,6 +1,7 @@
 # tdt2go
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/ystia/tdt2go)](https://goreportcard.com/report/github.com/ystia/tdt2go) [![GoDoc](https://godoc.org/github.com/ystia/tdt2go?status.svg)](https://godoc.org/github.com/ystia/tdt2go) [![Build Status](https://travis-ci.com/ystia/tdt2go.svg?branch=master)](https://travis-ci.com/ystia/tdt2go)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fystia%2Ftdt2go.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fystia%2Ftdt2go?ref=badge_shield)
 
 [![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=ystia_tdt2go)](https://sonarcloud.io/dashboard?id=ystia_tdt2go)
 
@@ -279,3 +280,7 @@ type ScalarUnitTim ScalarUnit
 type Version string
 
 ```
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fystia%2Ftdt2go.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fystia%2Ftdt2go?ref=badge_large)
