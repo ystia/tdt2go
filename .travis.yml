@@ -3,9 +3,10 @@ language: go
 go: stable
 
 install:
- - wget --output-document=gotestsum.tgz https://github.com/gotestyourself/gotestsum/releases/download/v0.3.5/gotestsum_0.3.5_linux_amd64.tar.gz
- - tar xzf gotestsum.tgz
- - rm -f gotestsum.tgz
+  - "curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh | sudo bash"
+  - wget --output-document=gotestsum.tgz https://github.com/gotestyourself/gotestsum/releases/download/v0.3.5/gotestsum_0.3.5_linux_amd64.tar.gz
+  - tar xzf gotestsum.tgz
+  - rm -f gotestsum.tgz
 
 script:
   # Test and compute coverage
@@ -14,6 +15,7 @@ script:
 after_script:
   # Publish sonar report
   - "[ -n \"${SONAR_TOKEN}\" ] && sonar-scanner"
+  - "[ -n \"${FOSSA_API_KEY}\" ] && { fossa init && fossa analyze ; }"
 
 addons:
   sonarcloud:
