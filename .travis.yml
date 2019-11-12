@@ -10,3 +10,7 @@ install:
 script:
   # Test and compute coverage
   - ./gotestsum --jsonfile tests-reports.json  -- -count=1 -coverprofile coverage-sonar.out -coverpkg=./... ./...
+
+addons:
+  sonarcloud:
+    organization: "ystia"
