@@ -17,7 +17,7 @@ after_script:
   # Publish sonar report
   - "[ -n \"${SONAR_TOKEN}\" ] && sonar-scanner"
   - "[ -n \"${FOSSA_API_KEY}\" ] && { fossa init && fossa analyze ; }"
-  - "[ -n \"${SNYK_TOKEN}\" ] && snyk test"
+  - "[ -n \"${SNYK_TOKEN}\" ] && snyk monitor"
 
 addons:
   sonarcloud:
