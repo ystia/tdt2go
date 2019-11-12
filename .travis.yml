@@ -13,7 +13,7 @@ script:
 
 after_script:
   # Publish sonar report
-  - "[ -n \"${SONAR_TOKEN}\"] && sonar-scanner"
+  - "[ -n \"${SONAR_TOKEN}\" ] && sonar-scanner"
 
 addons:
   sonarcloud:
