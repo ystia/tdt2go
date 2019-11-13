@@ -1,7 +1,6 @@
 # tdt2go
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/ystia/tdt2go)](https://goreportcard.com/report/github.com/ystia/tdt2go) [![GoDoc](https://godoc.org/github.com/ystia/tdt2go?status.svg)](https://godoc.org/github.com/ystia/tdt2go) [![Build Status](https://travis-ci.com/ystia/tdt2go.svg?branch=master)](https://travis-ci.com/ystia/tdt2go)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fystia%2Ftdt2go.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fystia%2Ftdt2go?ref=badge_shield)
+[![Go Report Card](https://goreportcard.com/badge/github.com/ystia/tdt2go)](https://goreportcard.com/report/github.com/ystia/tdt2go) [![GoDoc](https://godoc.org/github.com/ystia/tdt2go?status.svg)](https://godoc.org/github.com/ystia/tdt2go) [![Build Status](https://travis-ci.com/ystia/tdt2go.svg?branch=master)](https://travis-ci.com/ystia/tdt2go) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fystia%2Ftdt2go.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fystia%2Ftdt2go?ref=badge_shield)  [![license](https://img.shields.io/github/license/ystia/tdt2go.svg)](https://github.com/ystia/tdt2go/blob/master/LICENSE) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) [![Join the chat at https://gitter.im/ystia/tdt2go](https://badges.gitter.im/ystia/tdt2go.svg)](https://gitter.im/ystia/tdt2go?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 [![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=ystia_tdt2go)](https://sonarcloud.io/dashboard?id=ystia_tdt2go)
 
@@ -281,6 +280,12 @@ type Version string
 
 ```
 
-
 ## License
+
+tdt2go is distributed under Apache 2.0 License.
+
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fystia%2Ftdt2go.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fystia%2Ftdt2go?ref=badge_large)
+
+### Open-source dependencies & attributions
+
+tdt2go dependencies and attributions could be found here: <https://app.fossa.io/reports/9d5e1c45-ef44-4ed7-a433-fe47474d9d56>
