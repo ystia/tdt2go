@@ -37,6 +37,8 @@ type Parser struct {
 	// If no patterns are provided then all datatypes are considered.
 	// IncludePatterns have the precedence over ExcludePatterns.
 	ExcludePatterns []string
+	// NameMappings are regular expressions applied to TOSCA datatype fully qualified names to transform them into Go struct names
+	NameMappings map[string]string
 }
 
 func (p *Parser) nameValidatesPatterns(dtName string) (bool, error) {
@@ -163,8 +165,17 @@ func (p *Parser) convertTOSCAType(t string) string {
 }
 
 func (p *Parser) convertDTName(dtName string) string {
-	s := strings.Split(dtName, ".")
-	name := s[len(s)-1]
+	name := p.applyNameMappings(dtName)
+	s := strings.Split(name, ".")
+	name = s[len(s)-1]
 	name = strings.ReplaceAll(strings.Title(strings.ReplaceAll(name, "_", " ")), " ", "")
 	return name
+}
+
+func (p *Parser) applyNameMappings(dtName string) string {
+	for pattern, subst := range p.NameMappings {
+		re := regexp.MustCompile(pattern)
+		dtName = re.ReplaceAllString(dtName, subst)
+	}
+	return dtName
 }

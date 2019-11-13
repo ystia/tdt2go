@@ -28,12 +28,13 @@ Usage:
   tdt2go <tosca_file> [flags]
 
 Flags:
-  -e, --exclude strings    regexp patterns of data types fully qualified names to exclude. Only non-matching datatypes will be transformed. Include patterns have the precedence over exclude patterns.
-  -f, --file string        file to be generated, if not defined resulting generated file will be printed on default output.
-  -b, --generate-builtin   Generate tosca builtin types as 'range' or 'scalar-unit' for instance along with datatypes in this file. (default: false)
-  -h, --help               help for tdt2go
-  -i, --include strings    regexp patterns of data types fully qualified names to include. Only matching datatypes will be transformed. Include patterns have the precedence over exclude patterns.
-  -p, --package string     package name as it should appear in source file, defaults to the package name of the current directory.
+  -e, --exclude strings                regexp patterns of data types fully qualified names to exclude. Only non-matching datatypes will be transformed. Include patterns have the precedence over exclude patterns.
+  -f, --file string                    file to be generated, if not defined resulting generated file will be printed on default output.
+  -b, --generate-builtin               Generate tosca builtin types as 'range' or 'scalar-unit' for instance along with datatypes in this file. (default: false)
+  -h, --help                           help for tdt2go
+  -i, --include strings                regexp patterns of data types fully qualified names to include. Only matching datatypes will be transformed. Include patterns have the precedence over exclude patterns.
+  -m, --name-mappings stringToString   map of regular expressions and their corresponding remplacements that will be applied to TOSCA datatypes fully qualified names to transform them into Go struct names. This is generally used to keep information from the fully qualified name into the generated name. (default [])
+  -p, --package string                 package name as it should appear in source file, defaults to the package name of the current directory.
 ```
 
 ## Features & Roadmap
@@ -49,7 +50,7 @@ Flags:
   - `map` :arrow_right: map with entry_schema support
 - [x] Generation of TOSCA builtin types such as `version`, `range`, `scalar-unit`s ...
 - [x] include/exclude filters
-- [ ] Type name mapping like `tosca\.datatypes\.(.+)` :arrow_right: `Normative${1}` so `tosca.datatypes.Credential` become `NormativeCredential`
+- [x] Type name mapping like `tosca\.datatypes\.(.+)` :arrow_right: `Normative${1}` so `tosca.datatypes.Credential` become `NormativeCredential`
 - [ ] Use type or property description on generated comments
 - [ ] Make use of TOSCA `constraints` and `default`
 
@@ -277,6 +278,23 @@ type ScalarUnitTim ScalarUnit
 
 // Version is the generated representation of tosca:version data type
 type Version string
+
+```
+
+## Gotchas on names mappings
+
+Name mappings allows to rename a generated Go struct name based on its TOSCA fully qualified name using regular expressions.
+It is also very common to use the go generate command to generate Go code. Here are some gotchas to take into account.
+
+- the `$` is used in regexp replacements to identify capturing groups. But `$` is interpreted by go generate and should be replaced by `$DOLLAR`
+- mappings should not be single quoted as it should be using a regular shell
+
+Here is an example:
+
+```go
+package mytoscatypes
+
+//go:generate tdt2go -m tosca\.datatypes\.(.*)=TOSCA_$DOLLAR{1} -f struct_normative.go normative-types.yml
 
 ```
 

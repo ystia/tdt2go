@@ -24,6 +24,19 @@ data_types:
         type: float
       another_type:
         type: tosca.datatypes.Credential
-
+      a_range:
+        type: range
+      a_version:
+        type: version
+      a_scalar_unit:
+        type: scalar-unit
+      a_scalar_unit_size:
+        type: scalar-unit.size
+      a_scalar_unit_time:
+        type: scalar-unit.time
+      a_scalar_unit_bitrate:
+        type: scalar-unit.bitrate
+      a_scalar_unit_frequency:
+        type: scalar-unit.frequency
 
 
