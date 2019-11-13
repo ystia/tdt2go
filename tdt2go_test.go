@@ -36,6 +36,9 @@ func TestGenerateFile(t *testing.T) {
 			ExcludePatterns([]string{`tosca.*`}),
 			IncludePatterns([]string{`tosca\.datatypes.Root`}),
 		}}, false},
+		{"NameMappings", args{toscaFile: "testdata/normative-light.yaml", opts: []Option{
+			NameMappings(map[string]string{`tosca\.datatypes\.(.+)`: `TOSCA_${1}`}),
+		}}, false},
 		{"NormativeLightPlusBuiltin", args{toscaFile: "testdata/normative-light.yaml", opts: []Option{GenerateBuiltinTypes(true)}}, false},
 	}
 	for _, tt := range tests {

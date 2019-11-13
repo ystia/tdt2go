@@ -37,6 +37,7 @@ var generatedFile string
 var packageName string
 var includePatterns []string
 var excludePatterns []string
+var nameMappings map[string]string
 var generateBuiltinTypes bool
 
 func init() {
@@ -62,6 +63,7 @@ func init() {
 	rootCmd.Flags().StringSliceVarP(&includePatterns, "include", "i", nil, "regexp patterns of data types fully qualified names to include. Only matching datatypes will be transformed. Include patterns have the precedence over exclude patterns.")
 	rootCmd.Flags().StringSliceVarP(&excludePatterns, "exclude", "e", nil, "regexp patterns of data types fully qualified names to exclude. Only non-matching datatypes will be transformed. Include patterns have the precedence over exclude patterns.")
 	rootCmd.Flags().BoolVarP(&generateBuiltinTypes, "generate-builtin", "b", false, "Generate tosca builtin types as 'range' or 'scalar-unit' for instance along with datatypes in this file. (default: false)")
+	rootCmd.Flags().StringToStringVarP(&nameMappings, "name-mappings", "m", nil, "map of regular expressions and their corresponding remplacements that will be applied to TOSCA datatypes fully qualified names to transform them into Go struct names. This is generally used to keep information from the fully qualified name into the generated name.")
 }
 
 func generateOptions() ([]tdt2go.Option, error) {
@@ -84,6 +86,9 @@ func generateOptions() ([]tdt2go.Option, error) {
 	}
 	if generateBuiltinTypes {
 		opts = append(opts, tdt2go.GenerateBuiltinTypes(true))
+	}
+	if nameMappings != nil {
+		opts = append(opts, tdt2go.NameMappings(nameMappings))
 	}
 	return opts, nil
 }

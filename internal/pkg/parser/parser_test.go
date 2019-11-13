@@ -79,6 +79,72 @@ func TestParser_ParseTypes(t *testing.T) {
 				},
 			},
 		}, false},
+		{"TestParseWithNameMapping", &Parser{
+			NameMappings: map[string]string{
+				`tosca\.datatypes\.(R.+)`:        `TOSCA${1}`,
+				`tosca\.datatypes\.TimeInterval`: "ValidTimeInterval",
+			},
+		}, args{"testdata/normative-for-name-mapping.yaml"}, []model.DataType{
+			{
+				Name:        "Credential",
+				FQDTN:       "tosca.datatypes.Credential",
+				DerivedFrom: "TOSCARoot",
+				Fields: []model.Field{
+					{
+						Name:         "Keys",
+						OriginalName: "keys",
+						Type:         "map[string]string",
+					},
+					{
+						Name:         "Protocol",
+						OriginalName: "protocol",
+						Type:         "string",
+					},
+					{
+						Name:         "Token",
+						OriginalName: "token",
+						Type:         "string",
+					},
+					{
+						Name:         "TokenType",
+						OriginalName: "token_type",
+						Type:         "string",
+					},
+					{
+						Name:         "User",
+						OriginalName: "user",
+						Type:         "string",
+					},
+					{
+						Name:         "Validity",
+						OriginalName: "validity",
+						Type:         "ValidTimeInterval",
+					},
+				},
+			},
+			{
+				Name:   "TOSCARoot",
+				FQDTN:  "tosca.datatypes.Root",
+				Fields: []model.Field{},
+			},
+			{
+				Name:        "ValidTimeInterval",
+				FQDTN:       "tosca.datatypes.TimeInterval",
+				DerivedFrom: "TOSCARoot",
+				Fields: []model.Field{
+					{
+						Name:         "EndTime",
+						OriginalName: "end_time",
+						Type:         "time.Time",
+					},
+					{
+						Name:         "StartTime",
+						OriginalName: "start_time",
+						Type:         "time.Time",
+					},
+				},
+			},
+		}, false},
 		{"TestExtraToscaTypes", &Parser{}, args{"testdata/extratypes.yaml"}, []model.DataType{
 			{
 				Name:        "SpecificTypes",
@@ -89,6 +155,41 @@ func TestParser_ParseTypes(t *testing.T) {
 						Name:         "ANumber",
 						OriginalName: "a_number",
 						Type:         "float64",
+					},
+					{
+						Name:         "ARange",
+						OriginalName: "a_range",
+						Type:         "Range",
+					},
+					{
+						Name:         "AScalarUnit",
+						OriginalName: "a_scalar_unit",
+						Type:         "ScalarUnit",
+					},
+					{
+						Name:         "AScalarUnitBitrate",
+						OriginalName: "a_scalar_unit_bitrate",
+						Type:         "ScalarUnitBitRate",
+					},
+					{
+						Name:         "AScalarUnitFrequency",
+						OriginalName: "a_scalar_unit_frequency",
+						Type:         "ScalarUnitFrequency",
+					},
+					{
+						Name:         "AScalarUnitSize",
+						OriginalName: "a_scalar_unit_size",
+						Type:         "ScalarUnitSize",
+					},
+					{
+						Name:         "AScalarUnitTime",
+						OriginalName: "a_scalar_unit_time",
+						Type:         "ScalarUnitTime",
+					},
+					{
+						Name:         "AVersion",
+						OriginalName: "a_version",
+						Type:         "Version",
 					},
 					{
 						Name:         "AnotherType",
@@ -110,6 +211,7 @@ func TestParser_ParseTypes(t *testing.T) {
 		}, false},
 		{"TestParseIncludeFilters", &Parser{
 			IncludePatterns: []string{`tosca\.datatypes\.Cred.*`, `tosca.datatypes.Root`},
+			NameMappings:    map[string]string{`tosca\.datatypes\.TimeInterval`: "tosca.datatypes.CredButNotIncluded"},
 		}, args{"testdata/normative-light.yaml"}, []model.DataType{
 			{
 				Name:        "Credential",
@@ -151,6 +253,7 @@ func TestParser_ParseTypes(t *testing.T) {
 		}, false},
 		{"TestParseExcludeFilters", &Parser{
 			ExcludePatterns: []string{`tosca\.datatypes\.Cred.*`, `tosca\.datatypes.TimeInterval`},
+			NameMappings:    map[string]string{`tosca\.datatypes.TimeInterval`: "something.else.but.excluded.anyway"},
 		}, args{"testdata/normative-light.yaml"}, []model.DataType{
 			{
 				Name:   "Root",

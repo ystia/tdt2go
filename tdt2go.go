@@ -23,6 +23,7 @@ type Options struct {
 	generateBuiltinTypes bool
 	includePatterns      []string
 	excludePatterns      []string
+	nameMappings         map[string]string
 }
 
 // Option is a function that is allowed to tweak Options
@@ -72,6 +73,16 @@ func Output(out io.Writer) Option {
 	}
 }
 
+// NameMappings is map of regular expression and their corresponding remplacements that will be
+// applied to TOSCA datatype fully qualified names to transform them into Go struct names.
+//
+// Defaults to no mappings.
+func NameMappings(mappings map[string]string) Option {
+	return func(o *Options) {
+		o.nameMappings = mappings
+	}
+}
+
 // OutputToFile is an helper function that allow to dump generated code into a file
 //
 // See Output
@@ -106,7 +117,7 @@ func GenerateFile(toscaFile string, opts ...Option) error {
 	for _, o := range opts {
 		o(options)
 	}
-	p := &parser.Parser{IncludePatterns: options.includePatterns, ExcludePatterns: options.excludePatterns}
+	p := &parser.Parser{IncludePatterns: options.includePatterns, ExcludePatterns: options.excludePatterns, NameMappings: options.nameMappings}
 	dataTypes, err := p.ParseTypes(toscaFile)
 	if err != nil {
 		return err
