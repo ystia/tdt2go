@@ -281,6 +281,10 @@ type Version string
 
 ```
 
-
 ## License
+
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fystia%2Ftdt2go.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fystia%2Ftdt2go?ref=badge_large)
+
+### Open-source dependencies & attributions
+
+tdt2go dependencies and attributions could be found here: <https://app.fossa.io/reports/9d5e1c45-ef44-4ed7-a433-fe47474d9d56>
