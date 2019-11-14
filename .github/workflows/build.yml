@@ -66,6 +66,7 @@ jobs:
           rm -fr $PLATFORM
         done
     - name: Create Release
+      continue-on-error: true
       id: create_release
       uses: actions/create-release@v1
       env:
@@ -73,7 +74,7 @@ jobs:
       with:
         tag_name: ${{ github.ref }}
         release_name: Release ${{ github.ref }}
-        draft: false
+        draft: true
         prerelease: false
     - name: Upload Release Asset Zip
       id: upload-release-asset-aip 
