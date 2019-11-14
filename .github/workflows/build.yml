@@ -51,9 +51,10 @@ jobs:
           zip ../tdt2go_${OSARCH}.zip ./*
           tar czvf ../tdt2go_${OSARCH}.tgz ./*
           popd >/dev/null 2>&1
+          rm -fr $PLATFORM
         done
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
       with:
         name: tdt2go-bins
-        path: ./build/tdt2go_*.*
+        path: ./build/*
