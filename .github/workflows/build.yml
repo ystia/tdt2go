@@ -26,10 +26,10 @@ jobs:
     needs: [tests]
     steps:
     - uses: actions/checkout@v1
-    - name: Test and Build
+    - name: Build
       uses: docker://golang:1-stretch
       with:
-        args: ./cmd/tdt2go
+        args: go build ./cmd/tdt2go
       env:
         XDG_CACHE_HOME: /tmp/.cache
         HOME: /tmp/buildhome
