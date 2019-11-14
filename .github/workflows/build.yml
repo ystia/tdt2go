@@ -34,7 +34,7 @@ jobs:
 
   create_release:
       runs-on: [ubuntu-latest]
-      if: github.event_name == 'push' && startsWith(github.ref, "v")
+      if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
       needs: [tests]
       steps:
           - name: Create Release
@@ -50,7 +50,7 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && startsWith(github.ref, "v")
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
     needs: [tests, create_release]
     strategy:
         matrix:
