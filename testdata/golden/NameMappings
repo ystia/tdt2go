@@ -8,16 +8,25 @@ import (
 )
 
 // TOSCACredential is the generated representation of tosca.datatypes.Credential data type
+//
+// The Credential type is a complex TOSCA data Type used when describing authorization credentials used to access network accessible resources.
 type TOSCACredential struct {
 	TOSCARoot
-	Keys      map[string]string `mapstructure:"keys" json:"keys,omitempty"`
-	Protocol  string            `mapstructure:"protocol" json:"protocol,omitempty"`
-	Token     string            `mapstructure:"token" json:"token,omitempty"`
-	TokenType string            `mapstructure:"token_type" json:"token_type,omitempty"`
-	User      string            `mapstructure:"user" json:"user,omitempty"`
+	// The optional list of protocol-specific keys or assertions.
+	Keys map[string]string `mapstructure:"keys" json:"keys,omitempty"`
+	// The optional protocol name.
+	Protocol string `mapstructure:"protocol" json:"protocol,omitempty"`
+	// The required token used as a credential for authorization or access to a networked resource.
+	Token string `mapstructure:"token" json:"token,omitempty"`
+	// The required token type.
+	TokenType string `mapstructure:"token_type" json:"token_type,omitempty"`
+	// The optional user (name or ID) used for non-token based credentials.
+	User string `mapstructure:"user" json:"user,omitempty"`
 }
 
 // TOSCARoot is the generated representation of tosca.datatypes.Root data type
+//
+// The TOSCA root Data Type all other TOSCA base Data Types derive from
 type TOSCARoot struct {
 }
 

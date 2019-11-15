@@ -12,11 +12,17 @@ The goal of tdt2go is to create a generator that takes Data Types defined in a [
 
 ## Installation
 
+### Install using go get
+
 tdt2go can be installed using `go get`
 
 ```bash
 go get -u https://github.com/ystia/tdt2go/cmd/tdt2go
 ```
+
+## Binaries distributions
+
+Binaries distributions could be downloaded from [github](https://github.com/ystia/tdt2go/releases)
 
 ## Command options
 
@@ -51,7 +57,7 @@ Flags:
 - [x] Generation of TOSCA builtin types such as `version`, `range`, `scalar-unit`s ...
 - [x] include/exclude filters
 - [x] Type name mapping like `tosca\.datatypes\.(.+)` :arrow_right: `Normative${1}` so `tosca.datatypes.Credential` become `NormativeCredential`
-- [ ] Use type or property description on generated comments
+- [x] Use type or property description on generated comments
 - [ ] Make use of TOSCA `constraints` and `default`
 
 ## Example

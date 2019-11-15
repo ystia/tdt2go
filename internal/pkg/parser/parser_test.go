@@ -28,38 +28,45 @@ func TestParser_ParseTypes(t *testing.T) {
 				Name:        "Credential",
 				FQDTN:       "tosca.datatypes.Credential",
 				DerivedFrom: "Root",
+				Description: "The Credential type is a complex TOSCA data Type used when describing authorization credentials\nused to access network accessible resources.",
 				Fields: []model.Field{
 					{
 						Name:         "Keys",
 						OriginalName: "keys",
 						Type:         "map[string]string",
+						Description:  "The optional list of protocol-specific keys or assertions.",
 					},
 					{
 						Name:         "Protocol",
 						OriginalName: "protocol",
 						Type:         "string",
+						Description:  "The optional protocol name.",
 					},
 					{
 						Name:         "Token",
 						OriginalName: "token",
 						Type:         "string",
+						Description:  "The required token used as a credential\nfor authorization or access to a networked resource.",
 					},
 					{
 						Name:         "TokenType",
 						OriginalName: "token_type",
 						Type:         "string",
+						Description:  "The required token type.",
 					},
 					{
 						Name:         "User",
 						OriginalName: "user",
 						Type:         "string",
+						Description:  "The optional user (name or ID) used for non-token based credentials.",
 					},
 				},
 			},
 			{
-				Name:   "Root",
-				FQDTN:  "tosca.datatypes.Root",
-				Fields: []model.Field{},
+				Name:        "Root",
+				FQDTN:       "tosca.datatypes.Root",
+				Description: "The TOSCA root Data Type all other TOSCA base Data Types derive from",
+				Fields:      []model.Field{},
 			},
 			{
 				Name:        "TimeInterval",
@@ -89,31 +96,37 @@ func TestParser_ParseTypes(t *testing.T) {
 				Name:        "Credential",
 				FQDTN:       "tosca.datatypes.Credential",
 				DerivedFrom: "TOSCARoot",
+				Description: "The Credential type is a complex TOSCA data Type used when describing authorization credentials used to access network accessible resources.",
 				Fields: []model.Field{
 					{
 						Name:         "Keys",
 						OriginalName: "keys",
 						Type:         "map[string]string",
+						Description:  "The optional list of protocol-specific keys or assertions.",
 					},
 					{
 						Name:         "Protocol",
 						OriginalName: "protocol",
 						Type:         "string",
+						Description:  "The optional protocol name.",
 					},
 					{
 						Name:         "Token",
 						OriginalName: "token",
 						Type:         "string",
+						Description:  "The required token used as a credential for authorization or access to a networked resource.",
 					},
 					{
 						Name:         "TokenType",
 						OriginalName: "token_type",
 						Type:         "string",
+						Description:  "The required token type.",
 					},
 					{
 						Name:         "User",
 						OriginalName: "user",
 						Type:         "string",
+						Description:  "The optional user (name or ID) used for non-token based credentials.",
 					},
 					{
 						Name:         "Validity",
@@ -123,9 +136,10 @@ func TestParser_ParseTypes(t *testing.T) {
 				},
 			},
 			{
-				Name:   "TOSCARoot",
-				FQDTN:  "tosca.datatypes.Root",
-				Fields: []model.Field{},
+				Name:        "TOSCARoot",
+				FQDTN:       "tosca.datatypes.Root",
+				Description: "The TOSCA root Data Type all other TOSCA base Data Types derive from",
+				Fields:      []model.Field{},
 			},
 			{
 				Name:        "ValidTimeInterval",
@@ -223,38 +237,45 @@ func TestParser_ParseTypes(t *testing.T) {
 				Name:        "Credential",
 				FQDTN:       "tosca.datatypes.Credential",
 				DerivedFrom: "Root",
+				Description: "The Credential type is a complex TOSCA data Type used when describing authorization credentials\nused to access network accessible resources.",
 				Fields: []model.Field{
 					{
 						Name:         "Keys",
 						OriginalName: "keys",
 						Type:         "map[string]string",
+						Description:  "The optional list of protocol-specific keys or assertions.",
 					},
 					{
 						Name:         "Protocol",
 						OriginalName: "protocol",
 						Type:         "string",
+						Description:  "The optional protocol name.",
 					},
 					{
 						Name:         "Token",
 						OriginalName: "token",
 						Type:         "string",
+						Description:  "The required token used as a credential\nfor authorization or access to a networked resource.",
 					},
 					{
 						Name:         "TokenType",
 						OriginalName: "token_type",
 						Type:         "string",
+						Description:  "The required token type.",
 					},
 					{
 						Name:         "User",
 						OriginalName: "user",
 						Type:         "string",
+						Description:  "The optional user (name or ID) used for non-token based credentials.",
 					},
 				},
 			},
 			{
-				Name:   "Root",
-				FQDTN:  "tosca.datatypes.Root",
-				Fields: []model.Field{},
+				Name:        "Root",
+				FQDTN:       "tosca.datatypes.Root",
+				Description: "The TOSCA root Data Type all other TOSCA base Data Types derive from",
+				Fields:      []model.Field{},
 			},
 		}, false},
 		{"TestParseExcludeFilters", &Parser{
@@ -262,9 +283,10 @@ func TestParser_ParseTypes(t *testing.T) {
 			NameMappings:    map[string]string{`tosca\.datatypes.TimeInterval`: "something.else.but.excluded.anyway"},
 		}, args{"testdata/normative-light.yaml"}, []model.DataType{
 			{
-				Name:   "Root",
-				FQDTN:  "tosca.datatypes.Root",
-				Fields: []model.Field{},
+				Name:        "Root",
+				FQDTN:       "tosca.datatypes.Root",
+				Description: "The TOSCA root Data Type all other TOSCA base Data Types derive from",
+				Fields:      []model.Field{},
 			},
 		}, false},
 	}

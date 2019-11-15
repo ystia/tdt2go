@@ -31,6 +31,8 @@ jobs:
         HOME: /tmp/buildhome
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@v1.1
+      # Do this only on push commit do not need to be re-analyzed on PR
+      if: github.event_name == 'push'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

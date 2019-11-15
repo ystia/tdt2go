@@ -18,6 +18,8 @@ type DataType struct {
 	FQDTN string
 	// DerivedFrom is the parent Go struct identifier name
 	DerivedFrom string
+	// Description is the data type description field
+	Description string
 	// Fields are DataType fields (aka properties in TOSCA)
 	Fields []Field
 }
@@ -30,4 +32,6 @@ type Field struct {
 	OriginalName string
 	// Type is the Go struct field type
 	Type string
+	// Description is the property description field
+	Description string
 }

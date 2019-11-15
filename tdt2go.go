@@ -226,7 +226,7 @@ func getBuiltinTypes() []model.DataType {
 			DerivedFrom: "ScalarUnit",
 		},
 		{
-			Name:        "ScalarUnitTim",
+			Name:        "ScalarUnitTime",
 			FQDTN:       "tosca:scalar-unit.time",
 			DerivedFrom: "ScalarUnit",
 		},
