@@ -38,36 +38,22 @@ type TimeInterval struct {
 }
 
 // Range is the generated representation of tosca:range data type
-//
-// The range type can be used to define numeric ranges with a lower and upper boundary. For example, this allows for specifying a range of ports to be opened in a firewall.
 type Range []uint64
 
 // ScalarUnit is the generated representation of tosca:scalar-unit data type
-//
-// The scalar-unit type can be used to define scalar values along with a unit from the list of recognized units provided below.
 type ScalarUnit string
 
 // ScalarUnitBitRate is the generated representation of tosca:scalar-unit.bitrate data type
-//
-// used to define properties that have scalar values measured in bits or bytes per second.
 type ScalarUnitBitRate ScalarUnit
 
 // ScalarUnitFrequency is the generated representation of tosca:scalar-unit.frequency data type
-//
-// used to define properties that have scalar values measured in units per second.
 type ScalarUnitFrequency ScalarUnit
 
 // ScalarUnitSize is the generated representation of tosca:scalar-unit.size data type
-//
-// used to define properties that have scalar values measured in size units.
 type ScalarUnitSize ScalarUnit
 
 // ScalarUnitTime is the generated representation of tosca:scalar-unit.time data type
-//
-// used to define properties that have scalar values measured in time units.
 type ScalarUnitTime ScalarUnit
 
 // Version is the generated representation of tosca:version data type
-//
-// TOSCA supports the concept of “reuse” of type definitions, as well as template definitions which could be version and change over time.  It is important to provide a reliable, normative means to represent a version string which enables the comparison and management of types and templates over time. Therefore, the TOSCA TC intends to provide a normative version type (string) for this purpose in future Working Drafts of this specification.
 type Version string
