@@ -34,7 +34,7 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+#    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
     needs: [tests]
     strategy:
         matrix:
@@ -65,34 +65,34 @@ jobs:
           popd >/dev/null 2>&1
           rm -fr $PLATFORM
         done
-    - name: Create Release
-      continue-on-error: true
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+    - name: Upload tgz artifact
+      uses: actions/upload-artifact@v1.0.0
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
-    - name: Upload Release Asset Zip
-      id: upload-release-asset-aip 
-      uses: actions/upload-release-asset@v1.0.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        name: tdt2go-bins
+        path: ./build/tdt2go_${{ matrix.os }}_${{ matrix.arch }}.tgz
+    - name: Upload zip artifact
+      uses: actions/upload-artifact@v1.0.0
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: ./build/tdt2go_${{ matrix.os }}_${{ matrix.arch }}.zip
-        asset_name: tdt2go_${{ matrix.os }}_${{ matrix.arch }}.zip
-        asset_content_type: application/zip
-    - name: Upload Release Asset tgz
-      id: upload-release-asset-tgz 
-      uses: actions/upload-release-asset@v1.0.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        name: tdt2go-bins
+        path: ./build/tdt2go_${{ matrix.os }}_${{ matrix.arch }}.zip
+        
+  release:
+    runs-on: ubuntu-latest
+#    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+    needs: [tests]
+    steps:    
+    - name: Download artifact
+      uses: actions/download-artifact@v1.0.0
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: ./build/tdt2go_${{ matrix.os }}_${{ matrix.arch }}.tgz
-        asset_name: tdt2go_${{ matrix.os }}_${{ matrix.arch }}.tgz
-        asset_content_type: application/x-gzip
+        name: tdt2go-bins
+        path: build
+    - name: check artifacts
+      run: ls -hl ./build
+#    - name: GH Release
+#      uses: softprops/action-gh-release@v0.1.0
+#      id: make-release
+#      with:
+#        files: ./build/tdt2go_*_*.*
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
