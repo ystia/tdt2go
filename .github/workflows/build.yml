@@ -34,7 +34,7 @@ jobs:
     - name: Snyk Vulnerabilities Scan
       uses: docker://snyk/snyk-cli:npm
       with:
-        entry_point: '$HOME/docker-entrypoint.sh'
+        entrypoint: '$HOME/docker-entrypoint.sh'
         args: '--org=Ystia'
       env:
         MONITOR: true
