@@ -234,7 +234,7 @@ func getBuiltinTypes() []model.DataType {
 			Name:        "ScalarUnitTime",
 			FQDTN:       "tosca:scalar-unit.time",
 			DerivedFrom: "ScalarUnit",
-			Description: "used to define properties that have scalar values measured in size units.",
+			Description: "used to define properties that have scalar values measured in time units.",
 		},
 		{
 			Name:        "Version",

@@ -12,11 +12,17 @@ The goal of tdt2go is to create a generator that takes Data Types defined in a [
 
 ## Installation
 
+### Install using go get
+
 tdt2go can be installed using `go get`
 
 ```bash
 go get -u https://github.com/ystia/tdt2go/cmd/tdt2go
 ```
+
+## Binaries distributions
+
+Binaries distributions could be downloaded from [github](https://github.com/ystia/tdt2go/releases)
 
 ## Command options
 
