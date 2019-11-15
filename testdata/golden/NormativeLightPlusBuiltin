@@ -64,7 +64,7 @@ type ScalarUnitSize ScalarUnit
 
 // ScalarUnitTime is the generated representation of tosca:scalar-unit.time data type
 //
-// used to define properties that have scalar values measured in size units.
+// used to define properties that have scalar values measured in time units.
 type ScalarUnitTime ScalarUnit
 
 // Version is the generated representation of tosca:version data type
