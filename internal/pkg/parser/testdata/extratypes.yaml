@@ -18,9 +18,9 @@ data_types:
         required: false
         entry_schema:
           type: integer
-      valid_bool:
+      valid_bool_id:
         type: boolean
-      a_number:
+      1_number:
         type: float
       another_type:
         type: tosca.datatypes.Credential
@@ -39,4 +39,6 @@ data_types:
       a_scalar_unit_frequency:
         type: scalar-unit.frequency
 
+  tosca.datatypes.json:
+    derived_from: string
 

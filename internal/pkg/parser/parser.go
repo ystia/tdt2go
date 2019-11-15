@@ -6,7 +6,9 @@ import (
 	"regexp"
 	"sort"
 	"strings"
+	"unicode"
 
+	"github.com/serenize/snaker"
 	"github.com/ystia/yorc/v4/tosca"
 	"gopkg.in/yaml.v3"
 
@@ -113,7 +115,7 @@ func (p *Parser) convertDTFields(props map[string]tosca.PropertyDefinition) []mo
 	fields := make(dtFieldsSlice, 0)
 	for pName, prop := range props {
 		f := model.Field{
-			Name:         strings.ReplaceAll(strings.Title(strings.ReplaceAll(pName, "_", " ")), " ", ""),
+			Name:         convertToGoIdentifier(pName),
 			OriginalName: pName,
 			Type:         p.convertDTPropType(prop),
 		}
@@ -164,11 +166,31 @@ func (p *Parser) convertTOSCAType(t string) string {
 	return p.convertDTName(t)
 }
 
+func convertToGoIdentifier(name string) string {
+	// Replace all non letter non digit caracters to _
+	b := strings.Builder{}
+	for i, c := range name {
+		if i == 0 && !unicode.IsLetter(c) {
+			// Use canonical exporting prefix for such rare cases
+			b.WriteRune('X')
+			if unicode.IsDigit(c) {
+				b.WriteRune(c)
+			}
+		} else if !unicode.IsLetter(c) && !unicode.IsDigit(c) {
+			b.WriteRune('_')
+		} else {
+			b.WriteRune(c)
+		}
+	}
+	// Convert using snaker
+	return snaker.SnakeToCamel(b.String())
+}
+
 func (p *Parser) convertDTName(dtName string) string {
 	name := p.applyNameMappings(dtName)
 	s := strings.Split(name, ".")
 	name = s[len(s)-1]
-	name = strings.ReplaceAll(strings.Title(strings.ReplaceAll(name, "_", " ")), " ", "")
+	name = convertToGoIdentifier(name)
 	return name
 }
 
