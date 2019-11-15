@@ -152,8 +152,8 @@ func TestParser_ParseTypes(t *testing.T) {
 				DerivedFrom: "Root",
 				Fields: []model.Field{
 					{
-						Name:         "ANumber",
-						OriginalName: "a_number",
+						Name:         "X1Number",
+						OriginalName: "1_number",
 						Type:         "float64",
 					},
 					{
@@ -202,11 +202,17 @@ func TestParser_ParseTypes(t *testing.T) {
 						Type:         "[]int",
 					},
 					{
-						Name:         "ValidBool",
-						OriginalName: "valid_bool",
+						Name:         "ValidBoolID",
+						OriginalName: "valid_bool_id",
 						Type:         "bool",
 					},
 				},
+			},
+			{
+				Name:        "JSON",
+				FQDTN:       "tosca.datatypes.json",
+				DerivedFrom: "string",
+				Fields:      []model.Field{},
 			},
 		}, false},
 		{"TestParseIncludeFilters", &Parser{

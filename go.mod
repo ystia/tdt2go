@@ -5,6 +5,7 @@ go 1.13
 require (
 	github.com/google/go-cmp v0.3.1 // indirect
 	github.com/kr/pretty v0.1.0 // indirect
+	github.com/serenize/snaker v0.0.0-20171204205717-a683aaf2d516
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/ystia/yorc/v4 v4.0.0-M5
