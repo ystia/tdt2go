@@ -33,6 +33,9 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     - name: Snyk Vulnerabilities Scan
       uses: docker://snyk/snyk-cli:npm
+      with:
+        entry_point: '$HOME/docker-entrypoint.sh'
+        args: '--org=Ystia'
       env:
         MONITOR: true
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
