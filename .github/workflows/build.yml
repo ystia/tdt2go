@@ -31,10 +31,15 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
+    - name: Snyk Vulnerabilities Scan
+      uses: docker://snyk/snyk-cli:npm
+      env:
+        MONITOR: true
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        PROJECT_PATH: /github/workspace
   build:
     runs-on: ubuntu-latest
-#    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
     needs: [tests]
     strategy:
         matrix:
@@ -67,6 +72,7 @@ jobs:
         done
     - name: Upload tgz artifact
       uses: actions/upload-artifact@v1.0.0
+      if: matrix.os != 'windows'
       with:
         name: tdt2go-bins
         path: ./build/tdt2go_${{ matrix.os }}_${{ matrix.arch }}.tgz
@@ -78,7 +84,7 @@ jobs:
         
   release:
     runs-on: ubuntu-latest
-#    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
     needs: [build]
     steps:    
     - name: Download artifact
@@ -86,13 +92,11 @@ jobs:
       with:
         name: tdt2go-bins
         path: build
-    - name: check artifacts
-      run: ls -hl ./build
-#    - name: GH Release
-#      uses: softprops/action-gh-release@v0.1.0
-#      id: make-release
-#      with:
-#        files: ./build/tdt2go_*_*.*
-#      env:
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: GH Release
+      uses: softprops/action-gh-release@v0.1.0
+      id: make-release
+      with:
+        files: ./build/tdt2go_*_*.*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
