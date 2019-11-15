@@ -5,7 +5,7 @@ version: 2
 cli:
   server: https://app.fossa.com
   fetcher: custom
-  project: git@github.com:ystia/tdt2go.git
+  project: tdt2go
 analyze:
   modules:
   - name: github.com/ystia/tdt2go
