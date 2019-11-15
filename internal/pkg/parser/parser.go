@@ -92,6 +92,7 @@ func (p *Parser) ParseTypes(filePath string) ([]model.DataType, error) {
 			FQDTN:       dtName,
 			DerivedFrom: p.convertTOSCAType(dt.DerivedFrom),
 			Fields:      p.convertDTFields(dt.Properties),
+			Description: strings.Trim(dt.Description, " \t\n"),
 		})
 	}
 	sort.Sort(ts)
@@ -118,6 +119,7 @@ func (p *Parser) convertDTFields(props map[string]tosca.PropertyDefinition) []mo
 			Name:         convertToGoIdentifier(pName),
 			OriginalName: pName,
 			Type:         p.convertDTPropType(prop),
+			Description:  strings.Trim(prop.Description, " \t\n"),
 		}
 		fields = append(fields, f)
 	}

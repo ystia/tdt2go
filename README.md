@@ -51,7 +51,7 @@ Flags:
 - [x] Generation of TOSCA builtin types such as `version`, `range`, `scalar-unit`s ...
 - [x] include/exclude filters
 - [x] Type name mapping like `tosca\.datatypes\.(.+)` :arrow_right: `Normative${1}` so `tosca.datatypes.Credential` become `NormativeCredential`
-- [ ] Use type or property description on generated comments
+- [x] Use type or property description on generated comments
 - [ ] Make use of TOSCA `constraints` and `default`
 
 ## Example

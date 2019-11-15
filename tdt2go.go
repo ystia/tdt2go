@@ -204,36 +204,43 @@ func getBuiltinTypes() []model.DataType {
 			Name:        "Range",
 			FQDTN:       "tosca:range",
 			DerivedFrom: "[]uint64",
+			Description: "The range type can be used to define numeric ranges with a lower and upper boundary. For example, this allows for specifying a range of ports to be opened in a firewall.",
 		},
 		{
 			Name:        "ScalarUnit",
 			FQDTN:       "tosca:scalar-unit",
 			DerivedFrom: "string",
+			Description: "The scalar-unit type can be used to define scalar values along with a unit from the list of recognized units provided below.",
 		},
 		{
 			Name:        "ScalarUnitBitRate",
 			FQDTN:       "tosca:scalar-unit.bitrate",
 			DerivedFrom: "ScalarUnit",
+			Description: "used to define properties that have scalar values measured in bits or bytes per second.",
 		},
 		{
 			Name:        "ScalarUnitFrequency",
 			FQDTN:       "tosca:scalar-unit.frequency",
 			DerivedFrom: "ScalarUnit",
+			Description: "used to define properties that have scalar values measured in units per second.",
 		},
 		{
 			Name:        "ScalarUnitSize",
 			FQDTN:       "tosca:scalar-unit.size",
 			DerivedFrom: "ScalarUnit",
+			Description: "used to define properties that have scalar values measured in size units.",
 		},
 		{
-			Name:        "ScalarUnitTim",
+			Name:        "ScalarUnitTime",
 			FQDTN:       "tosca:scalar-unit.time",
 			DerivedFrom: "ScalarUnit",
+			Description: "used to define properties that have scalar values measured in size units.",
 		},
 		{
 			Name:        "Version",
 			FQDTN:       "tosca:version",
 			DerivedFrom: "string",
+			Description: "TOSCA supports the concept of “reuse” of type definitions, as well as template definitions which could be version and change over time.  It is important to provide a reliable, normative means to represent a version string which enables the comparison and management of types and templates over time. Therefore, the TOSCA TC intends to provide a normative version type (string) for this purpose in future Working Drafts of this specification.",
 		},
 	}
 }

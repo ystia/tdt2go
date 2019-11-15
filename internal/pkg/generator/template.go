@@ -13,12 +13,15 @@ import (
 ){{ end }}
 {{- range .DataTypes}}
 
-// {{.Name}} is the generated representation of {{.FQDTN}} data type
+// {{.Name}} is the generated representation of {{.FQDTN}} data type{{ if .Description }}
+//
+// {{ asComment .Description }}{{end}}
 type {{.Name}} {{ if and (ne .DerivedFrom "") (eq (len .Fields) 0) }}{{.DerivedFrom}}{{ else }}struct {
 {{- if ne .DerivedFrom ""}}
 	{{.DerivedFrom}}
 {{- end}}
-	{{- range .Fields}}
+	{{- range .Fields}}{{ if .Description }}
+	// {{ asComment .Description }}{{end}}
 	{{.Name}} {{.Type}} {{- if ne .OriginalName ""}} {{ $tick }}mapstructure:"{{.OriginalName}}" json:"{{.OriginalName}},omitempty"{{ $tick }}{{end}}{{end}}
 }
 {{end}}{{end -}}

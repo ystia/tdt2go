@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"go/format"
+	"strings"
 	"text/template"
 
 	"github.com/ystia/tdt2go/internal/pkg/model"
@@ -16,6 +17,9 @@ type Generator struct {
 // GenerateFile generates a formatted Go source file based on the given model.File representation
 func (*Generator) GenerateFile(f model.File) ([]byte, error) {
 	t := template.New("generator")
+	t.Funcs(template.FuncMap{
+		"asComment": asComment,
+	})
 	t = template.Must(t.Parse(fileTemplate))
 
 	b := &bytes.Buffer{}
@@ -30,4 +34,8 @@ func (*Generator) GenerateFile(f model.File) ([]byte, error) {
 	}
 
 	return result, nil
+}
+
+func asComment(input string) string {
+	return strings.ReplaceAll(input, "\n", "\n// ")
 }
